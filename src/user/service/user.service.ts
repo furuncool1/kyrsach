@@ -30,8 +30,10 @@ export class UserService {
   }
 
   async createUser(registerDto: RegisterDto): Promise<User> {
+ 
     const user = this.usersRepository.create(registerDto);
     user.password = await bcrypt.hash(user.password, 10);
+    user.role = await this.roleRepository.findOne({id:2});
     return await this.usersRepository.save(user);
   }
 

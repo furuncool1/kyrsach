@@ -27,6 +27,14 @@ export class PostController {
     return await this.postService.createPost(dto, req.user.id);
   }
 
+
+  @SetMetadata('roles', ['admin', 'author'])
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get("/post/:id")
+  async getPost(@Param('id') id:number){
+    return await this.postService.getPost(id);
+  }
+
   @SetMetadata('roles', ['admin', 'author'])
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Post("/post/:id")
@@ -47,9 +55,8 @@ export class PostController {
   }
 
 
-  @SetMetadata('roles', ['admin'])
-  @UseGuards(AuthGuard('jwt'))
-  @UseGuards(RolesGuard)
+  @SetMetadata('roles', ['admin','author'])
+  @UseGuards(AuthGuard('jwt'),RolesGuard)
   @Delete('/post/:id')
   async delete(@Res() resp: Response, @Param('id') id: number) {
     await this.postService.deletePost(id);

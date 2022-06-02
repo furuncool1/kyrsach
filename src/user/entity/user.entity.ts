@@ -27,7 +27,7 @@ export class User {
   password:string;
 
   @ManyToOne(() => Role, (role) => role.users)
-  role: User
+  role: Role
 
   @OneToMany(() => Post, (post) => post.author)
   posts: Post[]

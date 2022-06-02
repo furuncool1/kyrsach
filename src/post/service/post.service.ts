@@ -20,11 +20,17 @@ export class PostService{
     ){}
 
     paginate(){
-      return this.postRepository.find({relations:['author']});
-        // return paginate<Post>(this.postRepository, {
-        //     page:1,
-        //     limit:5
-        // });
+      return this.postRepository.find({
+          relations:['author'],
+          order:{
+          created_at:"DESC"
+        }
+    });
+
+    }
+
+    async getPost(id:number){
+        return await this.postRepository.findOne({id:id});
     }
 
     async createPost(dto:CreatePostDto,authorId:number){

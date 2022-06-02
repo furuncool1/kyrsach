@@ -1,4 +1,5 @@
-import { BadRequestException, Body, Controller, Get, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/registerDto';
 import { AuthService } from './service/auth.service';
@@ -13,7 +14,7 @@ export class AuthController {
   
   @Post('/login')
   async login(@Body() loginDto:LoginDto){
-      console.log(new Date().toDateString());
+
       const token = await this.authService.login(loginDto);
     
       if(token){
@@ -29,6 +30,7 @@ export class AuthController {
 
   @Post('/register')
   async register(@Body() registerDto:RegisterDto){
+      console.log('fassf');
       const token = await this.authService.register(registerDto);
       if(token){
         return {
@@ -37,6 +39,12 @@ export class AuthController {
       }
 
       throw new BadRequestException();
+  }
+
+  @Get('/get-user')
+  @UseGuards(AuthGuard('jwt'))
+  async getUser(@Request() req){
+    return req.user;
   }
 
 }
